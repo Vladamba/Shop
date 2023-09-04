@@ -51,7 +51,7 @@ class DB
                         email VARCHAR(128));');
     }
 
-    public function createOrder(): void
+    public function createOrders(): void
     {
         $this->execute('CREATE TABLE Orders(
                         order_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -105,15 +105,40 @@ class DB
                 ':Email' => $email));
     }
 
-    /*
-     * @TODO some inserts
-     */
+    public function insertIntoOrders($customer_id, $product_ids, $status,): void
+    {
+        $this->execute('INSERT INTO Orders(customer_id, product_ids, status)
+                        VALUES(:Customer_id, :Product_ids, :Status);',
+            array(
+                ':Customer_id' => $customer_id,
+                ':Product_ids' => $product_ids,
+                ':Status' => $status));
+    }
+
+    public function insertIntoTransactions($amount, $order_id): void
+    {
+        $this->execute('CREATE TABLE Transactions(amount, order_id)                                                  
+                        VALUES(:Amount, :Order_id);',
+            array(
+                ':Amount' => $amount,
+                ':Order_id' => $order_id));
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    public function selectFromProducts(): PDOStatement|false
+    public function selectFromProducts($category): PDOStatement|false
     {
-        return $this->execute('SELECT * FROM Products;');
+        if ($category == 'All') {
+            return $this->execute('SELECT * FROM Products;');
+        } else {
+            return $this->execute('SELECT * FROM Products WHERE category=:Category;',
+                array(':Category' => $category));
+        }
+    }
+
+    public function selectCategoriesFromProducts(): PDOStatement|false
+    {
+        return $this->execute('SELECT DISTINCT(category) FROM Products;');
     }
 
     public function selectFromProductInfo($product_id): PDOStatement|false
@@ -144,5 +169,17 @@ class DB
     {
         $this->execute('DELETE FROM Customers WHERE customer_id=:Customer_id;',
             array(':Customer_id' => $customer_id));
+    }
+
+    public function deleteFromOrders($order_id): void
+    {
+        $this->execute('DELETE FROM Orders WHERE order_id=:Order_id;',
+            array(':Order_id' => $order_id));
+    }
+
+    public function deleteFromTransactions($transaction_id): void
+    {
+        $this->execute('DELETE FROM Transactions WHERE transaction_id=:Transaction_id;',
+            array(':Transaction_id' => $transaction_id));
     }
 }
