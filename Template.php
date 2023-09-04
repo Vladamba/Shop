@@ -2,12 +2,12 @@
 
 class Template
 {
-    public static function main($category, $options, $products, $admin): string
+    public static function main($options, $products, $admin): string
     {
         $s = '';
         $f = false;
         while ($row = $options->fetch(PDO::FETCH_OBJ)) {
-            if ($row->category == $category) {
+            if ($row->category == $_GET['category']) {
                 $s .= '<option value="' . $row->category . '" selected>' . $row->category . '</option>';
                 $f = true;
             } else {
@@ -31,5 +31,21 @@ class Template
             $s .= '<hr>';
         }
         return str_replace('*products*', $s, $t);
+    }
+
+    public static function info($info, $admin): string
+    {
+        $s = '';
+        $row = $info->fetch(PDO::FETCH_OBJ);
+        if (!$row) {
+            $s .= '<div>No info(</div>';
+        } else {
+            $s .= '<div>Company: ' . $row->company . '; Country: ' . $row->country . '; Description: ' . $row->description . '; Bought: ' .
+                $row->bought . '; Remaining: ' . $row->remaining . '</div> <img src="' . $_GET['image'] . '" width="200" height="200">' . '<br> <a href="index.php">Back</a>';
+        }
+        if ($admin) {
+            echo '<a href="index.php?add=1&product_id=' . $_GET['product_id'] . '">Add</a>';
+        }
+        return str_replace('*info*', $s, file_get_contents('info.tpl'));
     }
 }
