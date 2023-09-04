@@ -11,8 +11,8 @@
         *options*
     </select>
     <input type="submit" value="Change category"/>
-    *products*
 </form>
+*products*
 
 </body>
 </html>

@@ -24,7 +24,7 @@ class Template
         $s = '';
         while ($row = $products->fetch(PDO::FETCH_OBJ)) {
             $s .= '<div>Id: ' . $row->product_id . '; Name: ' . $row->name . '; Price: ' . $row->price . '; Category: ' . $row->category .
-                '</div> <img src="' . $row->image . '" width="200" height="200"> <br> <a href="index.php?info=1&product_id=' . $row->product_id . '&image=' . $row->image . '">More...</a>';
+                '</div> <img src="' . $row->image . '" width="200" height="200"> <br> <a href="index.php?info=1&product_id=' . $row->product_id . '&image=' . $row->image . '">Info</a>';
             if ($admin) {
                 $s .= '<br> <a href="index.php?delete=1&product_id=' . $row->product_id . '">Delete</a>';
             }
@@ -44,8 +44,15 @@ class Template
                 $row->bought . '; Remaining: ' . $row->remaining . '</div> <img src="' . $_GET['image'] . '" width="200" height="200">' . '<br> <a href="index.php">Back</a>';
         }
         if ($admin) {
-            echo '<a href="index.php?add=1&product_id=' . $_GET['product_id'] . '">Add</a>';
+            echo '<a href="index.php?add=1&product_id=' . $_GET['product_id'] . '&image=' . $_GET['image'] . '">Add</a>';
         }
         return str_replace('*info*', $s, file_get_contents('info.tpl'));
+    }
+
+    public static function add(): string
+    {
+        $t = file_get_contents('add.tpl');
+        $t = str_replace('*image*' , $_GET['image'], $t);
+        return str_replace('*product_id*', $_GET['product_id'], $t);
     }
 }

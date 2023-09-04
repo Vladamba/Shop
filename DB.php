@@ -49,7 +49,7 @@ class DB
     {
         $this->execute('CREATE TABLE Customers(
                         customer_id INT PRIMARY KEY AUTO_INCREMENT,
-                        name VARCHAR(64), 
+                        login VARCHAR(64), 
                         password VARCHAR(64),
                         email VARCHAR(128));');
     }
@@ -99,12 +99,12 @@ class DB
                 ':Remaining' => $remaining));
     }
 
-    public function insertIntoCustomers($name, $password, $email): void
+    public function insertIntoCustomers($login, $password, $email): void
     {
-        $this->execute('INSERT INTO Customers(name, password, email)
-                        VALUES(:Name, :Password, :Email);',
+        $this->execute('INSERT INTO Customers(login, password, email)
+                        VALUES(:Login, :Password, :Email);',
             array(
-                ':Name' => $name,
+                ':Login' => $login,
                 ':Password' => $password,
                 ':Email' => $email));
     }
