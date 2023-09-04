@@ -5,17 +5,19 @@ class Template
     public static function main($category, $options, $products, $admin): string
     {
         $s = '';
-        if ($category == 'All') {
-            $s .= '<option value="All" selected>All</option>';
-        } else {
-            $s .= '<option value="All">All</option>';
-        }
+        $f = false;
         while ($row = $options->fetch(PDO::FETCH_OBJ)) {
             if ($row->category == $category) {
                 $s .= '<option value="' . $row->category . '" selected>' . $row->category . '</option>';
+                $f = true;
             } else {
                 $s .= '<option value="' . $row->category . '">' . $row->category . '</option>';
             }
+        }
+        if ($f) {
+            $s = '<option value="All">All</option>' . $s;
+        } else {
+            $s = '<option value="All" selected>All</option>' . $s;
         }
         $t = str_replace('*options*', $s, file_get_contents('main.tpl'));
 

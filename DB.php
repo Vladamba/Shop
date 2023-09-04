@@ -3,10 +3,12 @@
 class DB
 {
     private PDO $pdo;
+    public const ALL_CATEGORIES = 'All';
+    public const ADMIN_PASSWORD = 2152;
 
     public function __construct()
     {
-        $this->pdo = new PDO('mysql:host=127.0.0.1;dbname=Shop;', 'root', '2152', array(PDO::ATTR_PERSISTENT => false));
+        $this->pdo = new PDO('mysql:host=127.0.0.1;dbname=Shop;', 'root', DB::ADMIN_PASSWORD, array(PDO::ATTR_PERSISTENT => false));
     }
 
 //    public function __destruct()
@@ -128,7 +130,7 @@ class DB
 
     public function selectFromProducts($category): PDOStatement|false
     {
-        if ($category == 'All') {
+        if ($category == DB::ALL_CATEGORIES) {
             return $this->execute('SELECT * FROM Products;');
         } else {
             return $this->execute('SELECT * FROM Products WHERE category=:Category;',
