@@ -151,9 +151,13 @@ class DB
             array(':Product_id' => $product_id));
     }
 
-    /*
-     * @TODO some selects
-     */
+    public function selectFromCustomers($login, $password): PDOStatement|false
+    {
+        return $this->execute('SELECT login FROM Customers WHERE login=:Login AND password=:Password;',
+            array(
+                ':Login' => $login,
+                ':Password' => $password));
+    }
 
     ////////////////////////////////////////////////////////////////////////////////
 

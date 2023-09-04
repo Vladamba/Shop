@@ -15,9 +15,25 @@ $admin = isset($_GET['admin']) && $_GET['admin'] == DB::ADMIN_PASSWORD;
 
 $template = '';
 
+if (isset($_GET['selectCustomer'])) {
+    $result = $db->selectFromCustomers($_GET['login'], $_GET['password']);
+    $row = $result->fetch(PDO::FETCH_OBJ);
+    if ($row) {
+        $_COOKIE['enter'] = 1;
+        $_COOKIE['login'] = $_GET['login'];
+    } else {
+        $template = Template::enter();
+    }
+}
+
+if (isset($_GET['enter'])) {
+    $template = Template::enter();
+}
+
 if (isset($_GET['productInfo'])) {
     $template = Template::productInfo($db->selectFromProductInfo($_GET['product_id']), $admin);
 }
+
 if ($template == '') {
     if (isset($_GET['addProduct'])) {
         $db->insertIntoProducts($_GET['name'], $_GET['price'], $_GET['category'], $_GET['image']);
@@ -33,6 +49,10 @@ if ($template == '') {
     }
     if (isset($_GET['deleteProductInfo'])) {
         $db->deleteFromProductInfo($_GET['product_id']);
+    }
+
+    if (isset($_GET['addCustomer'])) {
+        $db->insertIntoCustomers($_GET['login'], $_GET['password'], $_GET['email']);
     }
 
     if (!isset($_GET['productCategory'])) {

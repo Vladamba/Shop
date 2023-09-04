@@ -33,6 +33,11 @@ class Template
         if ($admin) {
             $s .= file_get_contents('adminAddProduct.tpl');
         }
+        if (isset($_COOKIE['enter'])) {
+            $s .= '<div>Hello ' . $_COOKIE['login'] . '!</div>';
+        } else {
+            $s .= '<a href="index.php?enter=1">Enter</a>';
+        }
         return str_replace('*products*', $s, $t);
     }
 
@@ -50,5 +55,10 @@ class Template
             $s .= str_replace('*product_id*', $_GET['product_id'], file_get_contents('adminProductInfo.tpl'));
         }
         return str_replace('*productInfo*', $s, file_get_contents('productInfo.tpl'));
+    }
+
+    public static function enter(): string
+    {
+        return file_get_contents('enter.tpl');
     }
 }

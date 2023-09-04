@@ -12,6 +12,7 @@
     </select>
     <input type="submit" value="Change category"/>
 </form>
+
 *products*
 
 </body>
