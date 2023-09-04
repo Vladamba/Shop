@@ -6,7 +6,7 @@
 </head>
 <body>
 
-*info*
+*productInfo*
 
 </body>
 </html>

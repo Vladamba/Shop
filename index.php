@@ -15,28 +15,30 @@ $admin = isset($_GET['admin']) && $_GET['admin'] == DB::ADMIN_PASSWORD;
 
 $template = '';
 
-if (isset($_GET['add'])) {
-    if ($_GET['add'] == 0) {
-        $db->deleteFromProductInfo($_GET['product_id']);
-        $db->insertIntoProductInfo($_GET['product_id'], $_GET['company'], $_GET['country'], $_GET['description'], $_GET['bought'], $_GET['remaining']);
-        $_GET['info'] = 1;
-    } else {
-        $template = Template::add();
-    }
-}
-if (isset($_GET['info'])) {
-    $template = Template::info($db->selectFromProductInfo($_GET['product_id']), $admin);
+if (isset($_GET['productInfo'])) {
+    $template = Template::productInfo($db->selectFromProductInfo($_GET['product_id']), $admin);
 }
 if ($template == '') {
-    if (isset($_GET['delete'])) {
+    if (isset($_GET['addProduct'])) {
+        $db->insertIntoProducts($_GET['name'], $_GET['price'], $_GET['category'], $_GET['image']);
+    }
+    if (isset($_GET['deleteProduct'])) {
         $db->deleteFromProductInfo($_GET['product_id']);
         $db->deleteFromProducts($_GET['product_id']);
     }
 
-    if (!isset($_GET['category'])) {
-        $_GET['category'] = DB::ALL_CATEGORIES;
+    if (isset($_GET['addProductInfo'])) {
+        $db->deleteFromProductInfo($_GET['product_id']);
+        $db->insertIntoProductInfo($_GET['product_id'], $_GET['company'], $_GET['country'], $_GET['description'], $_GET['bought'], $_GET['remaining']);
     }
-    $template = Template::main($db->selectCategoriesFromProducts(), $db->selectFromProducts($_GET['category']), $admin);
+    if (isset($_GET['deleteProductInfo'])) {
+        $db->deleteFromProductInfo($_GET['product_id']);
+    }
+
+    if (!isset($_GET['productCategory'])) {
+        $_GET['productCategory'] = DB::ALL_CATEGORIES;
+    }
+    $template = Template::main($db->selectCategoriesFromProducts(), $db->selectFromProducts($_GET['productCategory']), $admin);
 }
 
 echo $template;

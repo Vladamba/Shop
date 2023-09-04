@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add</title>
-</head>
-<body>
-
+<br>
+<a href="index.php?deleteProductInfo=1&product_id=*product_id*">Delete</a>
 <form action="index.php" method="get">
-    <input type="text" name="add" value="0" hidden="hidden"/>
-    <input type="text" name="image" value="*image*" hidden="hidden"/>
+    <input type="text" name="addProductInfo" value="1" hidden="hidden"/>
     <input type="text" name="product_id" value="*product_id*" hidden="hidden"/>
     <input type="text" name="company" placeholder="Company"/>
     <input type="text" name="country" placeholder="Country"/>
@@ -17,6 +10,3 @@
     <input type="text" name="remaining" placeholder="Remaining"/>
     <input type="submit" value="Add"/>
 </form>
-
-</body>
-</html>

@@ -7,7 +7,7 @@
 <body>
 
 <form action="index.php" method="get">
-    <select name="category">
+    <select name="productCategory">
         *options*
     </select>
     <input type="submit" value="Change category"/>
