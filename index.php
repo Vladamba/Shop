@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 require_once 'Template.php';
 require_once 'DB.php';
 $db = new DB();
-//$db->createOrders();
+
 //require_once 'Start.php';
 //Start::createTables($db);
 //Start::insertIntoProducts($db);
@@ -115,10 +115,3 @@ if ($template == '') {
 }
 
 echo $template;
-
-//<form action="index.php" method="get">
-//    <input type="text" name="login" placeholder="Login"/>
-//    <input type="text" name="password" placeholder="Password"/>
-//    <input type="email" name="email" placeholder="Email"/>
-//    <input type="submit" value="Add"/>
-//</form>
