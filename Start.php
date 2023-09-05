@@ -8,7 +8,6 @@ class Start
         $db->createProductInfo();
         $db->createCustomers();
         $db->createOrders();
-        $db->createTransactions();
     }
 
     public static function insertIntoProducts(DB $db): void

@@ -59,18 +59,10 @@ class DB
         $this->execute('CREATE TABLE Orders(
                         order_id INT PRIMARY KEY AUTO_INCREMENT,
                         customer_id INT,   
-                        product_ids TEXT,                                             
-                        status INT,
+                        product_ids TEXT, 
+                        amount DECIMAL(6, 2),                                            
+                        status varchar(32),
                         FOREIGN KEY (customer_id) REFERENCES Customers(customer_id));');
-    }
-
-    public function createTransactions(): void
-    {
-        $this->execute('CREATE TABLE Transactions(
-                        transaction_id INT PRIMARY KEY AUTO_INCREMENT,
-                        amount DECIMAL(6, 2),
-                        order_id INT,                                                  
-                        FOREIGN KEY (order_id) REFERENCES Orders(order_id));');
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -109,23 +101,15 @@ class DB
                 ':Email' => $email));
     }
 
-    public function insertIntoOrders($customer_id, $product_ids, $status,): void
+    public function insertIntoOrders($customer_id, $product_ids, $amount, $status): void
     {
-        $this->execute('INSERT INTO Orders(customer_id, product_ids, status)
-                        VALUES(:Customer_id, :Product_ids, :Status);',
+        $this->execute('INSERT INTO Orders(customer_id, product_ids, amount, status)
+                        VALUES(:Customer_id, :Product_ids, :Amount, :Status);',
             array(
                 ':Customer_id' => $customer_id,
                 ':Product_ids' => $product_ids,
-                ':Status' => $status));
-    }
-
-    public function insertIntoTransactions($amount, $order_id): void
-    {
-        $this->execute('CREATE TABLE Transactions(amount, order_id)                                                  
-                        VALUES(:Amount, :Order_id);',
-            array(
                 ':Amount' => $amount,
-                ':Order_id' => $order_id));
+                ':Status' => $status));
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -145,18 +129,42 @@ class DB
         return $this->execute('SELECT DISTINCT(category) FROM Products;');
     }
 
+    public function selectNamePriceFromProducts($product_id): PDOStatement|false
+    {
+        return $this->execute('SELECT product_id, name, price FROM Products WHERE product_id=:Product_id;',
+            array(':Product_id' => $product_id));
+    }
+
+    public function selectPriceFromProducts($product_id): PDOStatement|false
+    {
+        return $this->execute('SELECT price FROM Products WHERE product_id=:Product_id;',
+            array(':Product_id' => $product_id));
+    }
+
     public function selectFromProductInfo($product_id): PDOStatement|false
     {
         return $this->execute('SELECT * FROM ProductInfo WHERE product_id=:Product_id;',
             array(':Product_id' => $product_id));
     }
 
-    public function selectFromCustomers($login, $password): PDOStatement|false
+    public function selectCustomerIdFromCustomers($login, $password): PDOStatement|false
     {
-        return $this->execute('SELECT login FROM Customers WHERE login=:Login AND password=:Password;',
+        return $this->execute('SELECT customer_id FROM Customers WHERE login=:Login AND password=:Password;',
             array(
                 ':Login' => $login,
                 ':Password' => $password));
+    }
+
+    public function selectFromCustomers(): PDOStatement|false
+    {
+        return $this->execute('SELECT * FROM Customers;');
+    }
+
+    public function selectFromOrders($customer_id): PDOStatement|false
+    {
+        return $this->execute('SELECT * FROM Orders WHERE customer_id=:Customer_id;',
+            array(
+                ':Customer_id' => $customer_id));
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -185,9 +193,4 @@ class DB
             array(':Order_id' => $order_id));
     }
 
-    public function deleteFromTransactions($transaction_id): void
-    {
-        $this->execute('DELETE FROM Transactions WHERE transaction_id=:Transaction_id;',
-            array(':Transaction_id' => $transaction_id));
-    }
 }
